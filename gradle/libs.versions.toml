@@ -3,6 +3,12 @@ jetbrains-compose = "1.7.1"
 kobweb = "0.20.3"
 kotlin = "2.1.10"
 
+serialization = "1.6.2"
+mongodb = "1.13.0"
+mongodb-kotlin = "4.11.0"
+mongo-version = "4.10.2"
+
+
 [libraries]
 compose-html-core = { module = "org.jetbrains.compose.html:html-core", version.ref = "jetbrains-compose" }
 compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "jetbrains-compose" }
@@ -16,6 +22,13 @@ silk-foundation = { module = "com.varabyte.kobweb:silk-foundation", version.ref 
 silk-icons-fa = { module = "com.varabyte.kobwebx:silk-icons-fa", version.ref = "kobweb" }
 silk-icons-mdi = { module = "com.varabyte.kobwebx:silk-icons-mdi", version.ref = "kobweb" }
 
+mongodb-sync = { module = "io.realm.kotlin:library-sync", version.ref = "mongodb" }
+mongodb-kotlin-driver = { module = "org.mongodb:mongodb-driver-kotlin-coroutine", version.ref = "mongodb-kotlin" }
+kotlinx-serialization = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
+
+mongodb-driver-core = { module = "org.mongodb:mongodb-driver-core", version.ref = "mongo-version" }
+mongodb-driver-sync = { module = "org.mongodb:mongodb-driver-sync", version.ref = "mongo-version" }
+
 [plugins]
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kobweb-application = { id = "com.varabyte.kobweb.application", version.ref = "kobweb" }
@@ -23,3 +36,5 @@ kobweb-library = { id = "com.varabyte.kobweb.library", version.ref = "kobweb" }
 kobweb-worker = { id = "com.varabyte.kobweb.worker", version.ref = "kobweb" }
 kobwebx-markdown = { id = "com.varabyte.kobwebx.markdown", version.ref = "kobweb" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+mongodb-realm = { id = "io.realm.kotlin", version.ref = "mongodb" }
+serialization-plugin = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }

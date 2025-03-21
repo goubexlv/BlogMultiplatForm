@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  kobweb-app:
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+       - '.:/app:cached'
+       - '/home/xlv/.gradle:/home/gradle/.gradle'
+    command: ./gradlew kobwebStart -PkobwebEnv=DEV -PkobwebRunLayout=FULLSTACK --continuous
+    depends_on:
+      - mongodb
+    networks:
+      - monreseau2
+
+  mongodb:
+    image: mongo
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - ./mongo_data:/data/db
+    networks:
+      - monreseau2
+
+networks:
+  monreseau2:

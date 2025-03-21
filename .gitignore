@@ -1,6 +1,7 @@
 # General ignores
 .DS_Store
 build
+mongo_data
 out
 kotlin-js-store
 
