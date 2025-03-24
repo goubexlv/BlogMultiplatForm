@@ -22,6 +22,7 @@ import kotlinx.coroutines.launch
 import org.example.blogmultiplatform.models.Themes
 import org.example.blogmultiplatform.models.User
 import org.example.blogmultiplatform.models.UserWithoutPassword
+import org.example.blogmultiplatform.navigation.Screen
 import org.example.blogmultiplatform.util.Res
 import org.example.blogmultiplatform.util.checkUserExistence
 import org.example.blogmultiplatform.util.constants.FONT_FAMILY
@@ -141,15 +142,15 @@ fun LoginScreen(){
                             if(username.isNotEmpty() && password.isNotEmpty()) {
                                 val user = checkUserExistence(
                                     user = User(
-                                        username,
-                                        password
+                                        username = username,
+                                        password = password
                                     )
                                 )
                                 if(user != null){
                                     rememberLoggedIn(remember = true, user = user)
-                                    context.router.navigateTo("admin/home")
+                                    context.router.navigateTo(Screen.AdminHome.route)
                                 } else {
-                                    errorText = "L'utilisateur n'existe pas."
+                                    errorText = "L'utilisateur n'existe pas.${user?.username}"
                                     delay(3000)
                                     errorText = " "
                                 }

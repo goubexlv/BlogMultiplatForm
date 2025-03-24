@@ -5,7 +5,7 @@ object Constants {
 
     val USER = "admin"
     val PASSWORD = "password"
-    val HOST = "mongodb"
+    val HOST = "127.0.0.1"
     val PORT = "27017"
     val MAX_POOL_SIZE = 20
     val COLLECTION_NAME = "users"

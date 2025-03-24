@@ -7,6 +7,7 @@ dependencies {
 }
 repositories {
     mavenCentral()
+    maven("https://jitpack.io")
 }
 kotlin {
     jvmToolchain(8)

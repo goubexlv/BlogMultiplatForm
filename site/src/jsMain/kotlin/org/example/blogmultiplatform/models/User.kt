@@ -14,6 +14,6 @@ actual data class User (
 @Serializable
 actual data class UserWithoutPassword(
     @SerialName(value = "_id")
-    actual val id: String = "",
-    actual val username: String = ""
+    actual val id: String,
+    actual val username: String
 )

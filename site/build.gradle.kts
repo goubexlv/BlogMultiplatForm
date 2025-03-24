@@ -35,6 +35,12 @@ kotlin {
             implementation(libs.kobweb.silk)
             implementation(libs.silk.icons.fa)
             implementation(libs.kotlinx.serialization)
+            implementation("io.ktor:ktor-client-core:2.3.6")
+            //implementation("io.ktor:ktor-client-cio:2.3.6")
+            implementation("io.ktor:ktor-client-js:2.3.6")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.6")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.6")
+            //implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
 
             // implementation(libs.kobwebx.markdown)
             implementation(project(":worker"))

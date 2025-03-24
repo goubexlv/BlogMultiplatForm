@@ -1,9 +1,13 @@
 package org.example.blogmultiplatform.util
 
 import com.varabyte.kobweb.browser.api
+import io.ktor.client.call.*
+import io.ktor.client.request.*
+import io.ktor.client.statement.*
+import io.ktor.http.*
 import kotlinx.browser.window
+import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
 import org.example.blogmultiplatform.models.User
 import org.example.blogmultiplatform.models.UserWithoutPassword
@@ -11,26 +15,54 @@ import org.w3c.dom.get
 import org.w3c.dom.set
 import kotlin.js.Date
 
+@Serializable
+data class IdRequest(val id: String)
+
 suspend fun checkUserExistence(user : User) : UserWithoutPassword? {
     return try {
-        val requestBody = Json.encodeToString(user).encodeToByteArray()
+        val response: HttpResponse = ApiClient.client.post("http://localhost:8080/api/usercheck") {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            setBody(user)
+        }
 
-        // Envoie la requête POST à l'API
-        val response = window.api.tryPost(
-            apiPath = "usercheck",
-            body = requestBody
-        )
+        // Affiche la réponse brute
+        val responseText = response.bodyAsText()
 
-        // Vérifie si la réponse est non nulle et la désérialise
-        response?.decodeToString()?.let { jsonResponse ->
-            Json.decodeFromString<UserWithoutPassword>(jsonResponse)
+        if (response.status == HttpStatusCode.OK) {
+            return Json.decodeFromString<UserWithoutPassword>(responseText)
+        } else {
+            println("Erreur HTTP : ${response.status}")
+            null
         }
     } catch (e: Exception) {
-        println("Échec de la vérification de l'utilisateur : ${e.message}")
+        println("CURRENT_USER")
+        println(e.message)
         null
     }
 }
 
-inline fun <reified T> String?.parseData(): T {
-    return Json.decodeFromString(this.toString())
+suspend fun checkUserId(id: String): Boolean {
+    return try {
+        val response: HttpResponse = ApiClient.client.post("http://localhost:8080/api/checkuserid") {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            setBody(Json.encodeToString(IdRequest(id)))
+        }
+
+        val responseText = response.bodyAsText()
+
+
+        if (response.status == HttpStatusCode.OK) {
+            Json.decodeFromString<Boolean>(responseText)
+        } else {
+            println("Erreur HTTP : ${response.status}")
+            false
+        }
+    } catch (e: Exception) {
+        println("Erreur lors de la requête : ${e.message}")
+        false
+    }
 }
+
+
