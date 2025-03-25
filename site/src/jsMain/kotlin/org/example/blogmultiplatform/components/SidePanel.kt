@@ -1,7 +1,8 @@
 package org.example.blogmultiplatform.components
 
 import androidx.compose.runtime.*
-import com.varabyte.kobweb.compose.css.Cursor
+import com.varabyte.kobweb.compose.css.*
+import com.varabyte.kobweb.compose.css.Transition
 import com.varabyte.kobweb.compose.dom.svg.Path
 import com.varabyte.kobweb.compose.dom.svg.Svg
 import com.varabyte.kobweb.compose.foundation.layout.Box
@@ -13,9 +14,6 @@ import com.varabyte.kobweb.compose.ui.modifiers.*
 import com.varabyte.kobweb.core.rememberPageContext
 import org.example.blogmultiplatform.models.Themes
 import org.example.blogmultiplatform.util.constants.SIDE_PANEL_WIDTH
-import org.jetbrains.compose.web.css.Position
-import org.jetbrains.compose.web.css.px
-import org.jetbrains.compose.web.css.vh
 import com.varabyte.kobweb.silk.components.graphics.Image
 import com.varabyte.kobweb.silk.components.icons.fa.FaBars
 import com.varabyte.kobweb.silk.components.icons.fa.FaXmark
@@ -24,6 +22,8 @@ import com.varabyte.kobweb.silk.components.text.SpanText
 import com.varabyte.kobweb.silk.style.breakpoint.Breakpoint
 import com.varabyte.kobweb.silk.style.toModifier
 import com.varabyte.kobweb.silk.theme.breakpoint.rememberBreakpoint
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import org.example.blogmultiplatform.navigation.Screen
 import org.example.blogmultiplatform.styles.NavigationItemStyle
 import org.example.blogmultiplatform.util.Id
@@ -31,7 +31,7 @@ import org.example.blogmultiplatform.util.Res
 import org.example.blogmultiplatform.util.constants.COLLAPSED_PANEL_HEIGHT
 import org.example.blogmultiplatform.util.constants.FONT_FAMILY
 import org.example.blogmultiplatform.util.logout
-import org.jetbrains.compose.web.css.percent
+import org.jetbrains.compose.web.css.*
 
 
 @Composable
@@ -226,7 +226,25 @@ private fun CollapsedSidePanel(onMenuClick: () -> Unit){
 fun OverflowSidePanel(
     onMenuClose: () -> Unit
 ){
+    val scope = rememberCoroutineScope()
     val breakpoint = rememberBreakpoint()
+
+    var translatex by remember { mutableStateOf((-100).percent) }
+    var opacity by remember { mutableStateOf(0.percent) }
+
+    LaunchedEffect(key1 = breakpoint) {
+        translatex = 0.percent
+        opacity = 100.percent
+        if(breakpoint > Breakpoint.MD) {
+            scope.launch {
+                translatex = (-100).percent
+                opacity = 0.percent
+                delay(500)
+                onMenuClose()
+            }
+
+        }
+    }
 
     Box (
         modifier = Modifier
@@ -234,6 +252,8 @@ fun OverflowSidePanel(
             .height(100.vh)
             .position(Position.Fixed)
             .zIndex(9)
+            .opacity(opacity)
+            .transition(Transition.of(property = "opacity", duration = 300.ms))
             .backgroundColor(Themes.HalfBlack.rgb)
     ){
         Column (
@@ -241,10 +261,14 @@ fun OverflowSidePanel(
                 .padding(all = 24.px)
                 .fillMaxHeight()
                 .width(if(breakpoint < Breakpoint.MD) 50.percent else 25.percent )
+                .translateX(translatex)
+                .transition(Transition.of(property = "translate", duration = 300.ms))
+                .overflow(Overflow.Auto)
+                .scrollBehavior(ScrollBehavior.Smooth)
                 .backgroundColor(Themes.Secondary.rgb)
         ){
             Row (
-                modifier = Modifier.margin(bottom = 24.px),
+                modifier = Modifier.margin(bottom = 60.px, top = 24.px),
                 verticalAlignment = Alignment.CenterVertically
             ){
                 FaXmark(
@@ -253,7 +277,12 @@ fun OverflowSidePanel(
                         .color(Colors.White)
                         .cursor(Cursor.Pointer)
                         .onClick {
-                            onMenuClose()
+                            scope.launch {
+                                translatex = (-100).percent
+                                opacity = 0.percent
+                                delay(500)
+                                onMenuClose()
+                            }
                         },
                     size = IconSize.LG
                 )

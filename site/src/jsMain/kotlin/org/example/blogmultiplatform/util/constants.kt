@@ -6,11 +6,24 @@ object constants {
     const val PAGE_WIDTH = 1920
     const val HEADER_HEIGHT = 100
     const val COLLAPSED_PANEL_HEIGHT = 100
+    const val HUMOR_API_URL = "https://api.humorapi.com/jokes/random?api-key=f0cac1365ead42e58b2ee94684b45b56&max-length=180"
 }
 
 object Res {
     object Image {
         const val logo = "/logo.svg"
+        const val laugh = "/laugh.png"
+    }
+    object Icon {
+        const val bold = "/bold.svg"
+        const val italic = "/italic.svg"
+        const val link = "/link.svg"
+        const val title = "/title.svg"
+        const val subtitle = "/subtitle.svg"
+        const val quote = "/quote.svg"
+        const val code = "/code.svg"
+        const val image = "/image.svg"
+        const val checkmark = "/checkmark.svg"
     }
 
     object PathIcon {
