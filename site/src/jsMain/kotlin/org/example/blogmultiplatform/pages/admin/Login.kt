@@ -26,6 +26,7 @@ import org.example.blogmultiplatform.navigation.Screen
 import org.example.blogmultiplatform.util.Res
 import org.example.blogmultiplatform.util.checkUserExistence
 import org.example.blogmultiplatform.util.constants.FONT_FAMILY
+import org.example.blogmultiplatform.util.noBorder
 import org.jetbrains.compose.web.attributes.InputType
 import org.jetbrains.compose.web.css.Color
 import org.jetbrains.compose.web.css.LineStyle
@@ -73,16 +74,7 @@ fun LoginScreen(){
                     .backgroundColor(Color.white)
                     .fontFamily(FONT_FAMILY)
                     .fontSize(14.px)
-                    .border(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
-                    .outline(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
+                    .noBorder()
                     .padding(leftRight = 20.px),
                 placeholder = "Username",
                 value = username,
@@ -99,16 +91,7 @@ fun LoginScreen(){
                     .backgroundColor(Color.white)
                     .fontFamily(FONT_FAMILY)
                     .fontSize(14.px)
-                    .border(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
-                    .outline(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
+                    .noBorder()
                     .padding(leftRight = 20.px),
                 placeholder = "Password",
                 value = password,
@@ -126,16 +109,7 @@ fun LoginScreen(){
                     .fontFamily(FONT_FAMILY)
                     .fontWeight(FontWeight.Medium)
                     .fontSize(14.px)
-                    .border(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
-                    .outline(
-                        width = 0.px,
-                        style = LineStyle.None,
-                        color = Color.transparent
-                    )
+                    .noBorder()
                     .cursor(Cursor.Pointer)
                     .onClick {
                         scope.launch {

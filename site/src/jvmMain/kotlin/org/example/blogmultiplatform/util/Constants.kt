@@ -9,4 +9,5 @@ object Constants {
     val PORT = "27017"
     val MAX_POOL_SIZE = 20
     val COLLECTION_NAME = "users"
+    val COLLECTION_NAME_POST = "posts"
 }

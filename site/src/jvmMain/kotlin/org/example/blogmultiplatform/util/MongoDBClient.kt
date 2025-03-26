@@ -5,6 +5,7 @@ import com.mongodb.client.MongoCollection
 import com.mongodb.client.MongoDatabase
 import org.bson.Document
 import org.example.blogmultiplatform.util.Constants.COLLECTION_NAME
+import org.example.blogmultiplatform.util.Constants.COLLECTION_NAME_POST
 import org.example.blogmultiplatform.util.Constants.USER
 import org.example.blogmultiplatform.util.Constants.DATABASE_NAME
 import org.example.blogmultiplatform.util.Constants.HOST
@@ -16,6 +17,7 @@ object MongoDBClient {
 
     private val database: MongoDatabase
     val usersCollection: MongoCollection<Document>
+    val postCollection: MongoCollection<Document>
 
     init {
         val credentials = if (USER.isNotBlank() && PASSWORD.isNotBlank()) {
@@ -28,5 +30,6 @@ object MongoDBClient {
         val mongoClient = MongoClients.create(uri)
         database = mongoClient.getDatabase(DATABASE_NAME)
         usersCollection = database.getCollection(COLLECTION_NAME)
+        postCollection = database.getCollection(COLLECTION_NAME_POST)
     }
 }

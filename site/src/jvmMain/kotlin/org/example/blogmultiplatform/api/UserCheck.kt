@@ -103,23 +103,6 @@ suspend fun addUser(context: ApiContext) {
     }
 }
 
-@Api(routeOverride = "check-db-connection")
-suspend fun checkDatabaseConnection(context: ApiContext) {
-    try {
-        // Tente de récupérer une collection de test (par exemple, "users")
-        val result = MongoDBClient.usersCollection.find().limit(1).toList()
-
-        if (result.isNotEmpty()) {
-            context.res.setBodyText(Json.encodeToString(mapOf("message" to "Connexion à la base de données réussie")))
-        } else {
-            context.res.setBodyText(Json.encodeToString(mapOf("message" to "La base de données est connectée mais la collection est vide")))
-        }
-    } catch (e: Exception) {
-        // Si une exception est lancée, cela signifie qu'il y a un problème avec la connexion
-        context.res.setBodyText(Json.encodeToString(mapOf("error" to "Erreur de connexion à la base de données", "message" to e.message)))
-    }
-}
-
 
 
 

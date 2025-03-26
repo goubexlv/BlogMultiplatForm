@@ -11,6 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import org.example.blogmultiplatform.models.Post
 import org.example.blogmultiplatform.models.RandomJoke
 import org.example.blogmultiplatform.models.User
 import org.example.blogmultiplatform.models.UserWithoutPassword
@@ -117,6 +118,26 @@ suspend fun fetchRandomJoke(onComplete: (RandomJoke) -> Unit){
                 println(e.message)
             }
 
+    }
+}
+
+suspend fun addPost(post: Post): Boolean {
+    return try {
+
+        val response: HttpResponse = ApiClient.client.post("http://localhost:8080/api/addpost") {
+            contentType(ContentType.Application.Json)
+            accept(ContentType.Application.Json)
+            setBody(post)
+        }
+
+        if (response.status == HttpStatusCode.OK) {
+            return true
+        } else {
+            return false
+        }
+    } catch (e: Exception) {
+        println(e.message.toString())
+        false
     }
 }
 
