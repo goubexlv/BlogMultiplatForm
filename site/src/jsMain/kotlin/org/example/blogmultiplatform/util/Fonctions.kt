@@ -16,6 +16,7 @@ import org.jetbrains.compose.web.css.px
 import org.w3c.dom.HTMLTextAreaElement
 import org.w3c.dom.get
 import org.w3c.dom.set
+import kotlin.js.Date
 
 @Composable
 fun isUserLoggedIn(content: @Composable () -> Unit) {
@@ -88,7 +89,9 @@ fun applyStyle(controlStyle: ControlStyle) {
 }
 
 fun applyControlStyle(
-    editorControl: EditorControl
+    editorControl: EditorControl,
+    onLinkClick: () -> Unit,
+    onImageClick: () -> Unit
 ) {
     when (editorControl) {
         EditorControl.Bold -> {
@@ -108,7 +111,7 @@ fun applyControlStyle(
         }
 
         EditorControl.Link -> {
-            //onLinkClick()
+            onLinkClick()
         }
 
         EditorControl.Title -> {
@@ -143,11 +146,21 @@ fun applyControlStyle(
             )
         }
         EditorControl.Image -> {
-            //onImageClick()
+            onImageClick()
         }
     }
 }
 
+fun Double.parseDateString() = Date(this).toLocaleDateString()
+
+fun parseSwitchText(posts: List<String>): String {
+    return if (posts.size == 1) "1 Post Selected" else "${posts.size} Posts Selected"
+}
+
+fun validateEmail(email: String): Boolean {
+    val regex = "^[A-Za-z](.*)(@)(.+)(\\.)(.+)"
+    return regex.toRegex().matches(email)
+}
 
 
 

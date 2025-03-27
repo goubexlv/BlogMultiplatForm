@@ -11,10 +11,7 @@ import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import org.example.blogmultiplatform.models.Post
-import org.example.blogmultiplatform.models.RandomJoke
-import org.example.blogmultiplatform.models.User
-import org.example.blogmultiplatform.models.UserWithoutPassword
+import org.example.blogmultiplatform.models.*
 import org.example.blogmultiplatform.util.constants.HUMOR_API_URL
 import org.w3c.dom.get
 import org.w3c.dom.set
@@ -138,6 +135,21 @@ suspend fun addPost(post: Post): Boolean {
     } catch (e: Exception) {
         println(e.message.toString())
         false
+    }
+}
+
+suspend fun fetchMyPosts(
+    skip: Int,
+    onSuccess: (ApiListResponse) -> Unit,
+    onError: (Exception) -> Unit
+) {
+    try {
+        val result = ApiClient.client.get("http://localhost:8080/api/readmyposts?skip=$skip&author=${localStorage["username"]}")
+        val responseText = result.bodyAsText()
+        onSuccess(Json.decodeFromString<ApiListResponse>(responseText))
+    } catch (e: Exception) {
+        println(e)
+        onError(e)
     }
 }
 

@@ -27,6 +27,7 @@ import kotlinx.browser.localStorage
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.example.blogmultiplatform.components.AdminPageLayout
+import org.example.blogmultiplatform.components.LinkPopup
 import org.example.blogmultiplatform.components.MessagePopup
 import org.example.blogmultiplatform.models.*
 import org.example.blogmultiplatform.navigation.Screen
@@ -56,6 +57,8 @@ data class CreatePageUiState(
     var sponsored: Boolean = false,
     var editorVisibility: Boolean = true,
     var messagePopup: Boolean = false,
+    var linkPopup: Boolean = false,
+    var imagePopup: Boolean = false,
     var fileName : String = ""
 )
 
@@ -235,7 +238,14 @@ fun CreateScreen() {
                     onEditorVisibilityChange = {
                         uiState = uiState.copy(
                             editorVisibility = !uiState.editorVisibility
-                        ) }
+                        )
+                    },
+                    onLinkClick = {
+                        uiState = uiState.copy(linkPopup = true)
+                    },
+                    onImageClick = {
+                        uiState = uiState.copy(imagePopup = true)
+                    }
                 )
                 Editor(
                     editorVisibility = uiState.editorVisibility
@@ -300,6 +310,39 @@ fun CreateScreen() {
             onDialogDismiss = {uiState = uiState.copy(messagePopup = false)}
         )
     }
+    if (uiState.linkPopup) {
+        LinkPopup(
+            editorControl = EditorControl.Link,
+            onDialogDismiss = { uiState = uiState.copy(linkPopup = false) },
+            onAddClick = { href, title ->
+                applyStyle(
+                    ControlStyle.Link(
+                        selectedText = getSelectedText(),
+                        href = href,
+                        title = title
+                    )
+                )
+            }
+        )
+    }
+
+    if (uiState.imagePopup) {
+        LinkPopup(
+            editorControl = EditorControl.Image,
+            onDialogDismiss = { uiState = uiState.copy(imagePopup = false) },
+            onAddClick = { imageUrl, description ->
+                applyStyle(
+                    ControlStyle.Image(
+                        selectedText = getSelectedText(),
+                        imageUrl = imageUrl,
+                        alt = description
+                    )
+                )
+            }
+        )
+    }
+
+
 }
 
 
@@ -432,6 +475,8 @@ fun ThumbnailUploader(
 fun EditorControls(
     breakpoint : Breakpoint,
     editorVisibility: Boolean,
+    onLinkClick: () -> Unit,
+    onImageClick: () -> Unit,
     onEditorVisibilityChange: () -> Unit
 ){
 
@@ -451,7 +496,9 @@ fun EditorControls(
                         control = it,
                         onClick = {
                             applyControlStyle(
-                                it
+                                editorControl = it,
+                                onLinkClick = onLinkClick,
+                                onImageClick = onImageClick
                             )
                         }
                     )
@@ -479,6 +526,8 @@ fun EditorControls(
                         .noBorder()
                         .onClick {
                             onEditorVisibilityChange()
+                            document.getElementById(Id.editorPreview)?.innerHTML = getEditor().value
+                            js("hljs.highlightAll()") as Unit
                         }
                         .toAttrs()
                 ) {
@@ -537,6 +586,15 @@ fun Editor(editorVisibility: Boolean) {
                     if (editorVisibility) Visibility.Visible
                     else Visibility.Hidden
                 )
+                .onKeyDown {
+                    if (it.code == "Enter" && it.shiftKey) {
+                        applyStyle(
+                            controlStyle = ControlStyle.Break(
+                                selectedText = getSelectedText()
+                            )
+                        )
+                    }
+                }
                 .fontFamily(FONT_FAMILY)
                 .fontSize(16.px)
                 .toAttrs{

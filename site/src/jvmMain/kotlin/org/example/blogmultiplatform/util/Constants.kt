@@ -2,6 +2,7 @@ package org.example.blogmultiplatform.util
 
 object Constants {
     const val DATABASE_NAME = "myblog"
+    const val POSTS_PER_PAGE = 8
 
     val USER = "admin"
     val PASSWORD = "password"
